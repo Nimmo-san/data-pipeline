@@ -13,7 +13,7 @@ load_dotenv()
 # Configure logging
 logging.basicConfig(
     # can also be added to a file named etl_process.log
-    filename=None,
+    filename="etl_process.log",
     level=logging.INFO,  # Set level to INFO or DEBUG to capture more details
     format='%(asctime)s - %(levelname)s - %(message)s'  # Format for the logs
 )
@@ -41,6 +41,7 @@ def extract_weather_data(city):
 
 
 def transform_weather_data(raw_data):
+    """"""
     try:
         logging.info("Starting data transformation.")
         if raw_data:
@@ -62,6 +63,7 @@ def transform_weather_data(raw_data):
 
 
 def create_database():
+    """"""
     conn = sqlite3.connect("weather_data.db")
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS weather (
@@ -75,6 +77,7 @@ def create_database():
 
 
 def load_weather_data(data):
+    """"""
     try:
         logging.info(f"Starting data load for city: {data['city']}")
         conn = sqlite3.connect("weather_data.db")
@@ -96,6 +99,7 @@ def load_weather_data(data):
 
 
 def run_etl(cities: list):
+        """"""
         calls_made = 0
         max_calls_per_hours = 60
         delay = 3600 / max_calls_per_hours

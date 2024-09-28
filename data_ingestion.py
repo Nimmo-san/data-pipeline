@@ -1,6 +1,9 @@
+import schedule
+import time
 import requests
 import sqlite3
 from pprint import pprint
+
 
 def extract_weather_data(city):
 	api_key = "2bce98f4eae16b83917e8a2b32ea8ea1"
@@ -44,10 +47,27 @@ def load_weather_data(data):
     conn.commit()
     conn.close()
 
+def run_etl(cities):
+	calls_made = 0
+	max_calls_per_hour = 60
+	delay = 3600 / max_calls_per_hour	
+	for city in cities:
+
+		raw_data = extract_weather_data(city)
+		transformed_data = transform_weather_data(raw_data)
+		load_weather_data(transformed_data)
+
+		calls_made += 1
+		if calls_made < max_calls_per_hour:
+			time.sleep(delay)
+		else:
+			time.sleep(3600)
+			calls_made = 0
 
 if __name__ == '__main__':
-	create_database()
-	raw_data = extract_weather_data('london')
-	transformed_data = transform_weather_data(raw_data)
-	pprint(transformed_data)
-	load_weather_data(transformed_data)
+	# Scheduling to run ETL every hour
+	schedule.every(1).hour.do(run_etl, cities=["London", "Manchester", "New York"])
+
+	while True:
+		schedule.run_pending()
+		time.sleep(1)

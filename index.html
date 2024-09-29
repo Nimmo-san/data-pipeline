@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Data Visualisation</title>
+</head>
+<body>
+
+<h1>Weather Data Visualisation</h1>
+
+<!-- City Dropdown -->
+<select id="citySelect">
+    <option value="">Select a city</option>
+</select>
+
+<!-- Chart Container -->
+<div id="chartContainer">
+    <canvas id="temperatureChart"></canvas>
+</div>
+
+<script>
+    // Fetch list of cities from the API
+    fetch('http://127.0.0.1:8000/cities')
+        .then(response => response.json())
+        .then(cities => {
+            //console.log("This is working!")
+            console.log("Fetched cities: ", cities)
+            const citySelect = document.getElementById('citySelect');
+
+            if (!citySelect){
+                console.log("Dropdown element with id 'citySelect' not found.");
+                return;
+            }
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.text = city;
+                citySelect.add(option);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching cities: ", error);
+        });
+
+    // Event listener for city selection
+    document.getElementById('citySelect').addEventListener('change', function() {
+        const city = this.value;
+        if (city) {
+            // Fetch weather data for the selected city
+            fetch(`http://127.0.0.1:8000/weather/${city}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // For debugging
+                    // Extract temperature and timestamp data
+                    const temperatures = data.map(d => d.temperature);
+                    const timestamps = data.map(d => new Date(d.timestamp * 1000).toLocaleString());
+
+                    // Plotting the data using Chart.js
+                    const ctx = document.getElementById('temperatureChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: timestamps,
+                            datasets: [{
+                                label: `Temperature in ${city}`,
+                                data: temperatures,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                x: { title: { display: true, text: 'Time' } },
+                                y: { title: { display: true, text: 'Temperature (°C)' } }
+                            }
+                        }
+                    });
+                });
+        }
+    });
+</script>
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

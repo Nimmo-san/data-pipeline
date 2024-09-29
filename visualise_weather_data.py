@@ -13,7 +13,7 @@ def get_weather_data():
     return df
 
 
-def visualize_data():
+def visualise_data():
     df = get_weather_data()
     
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
@@ -36,11 +36,11 @@ def visualize_data():
     plt.title("Correlation Heatmap of Weather Parameters")
     plt.show()
     
-    # Interactive plotly visualization
+    # Interactive plotly visualisation
     fig = px.line(df, x='timestamp', y='temperature', color='city',
                   title='Temperature Over Time by City')
     fig.show()
 
 if __name__ == "__main__":
-    visualize_data()
+    visualise_data()
 

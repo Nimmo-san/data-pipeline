@@ -1,4 +1,4 @@
-# Weather Data ETL & Visualization Project
+# Weather Data ETL & Visualisation Project
 
 ## Table of Contents
 - [Overview](#overview)
@@ -15,9 +15,9 @@
 ---
 
 ## Overview
-This project is an ETL (Extract, Transform, Load) pipeline that collects weather data from an external API, stores it in a SQLite database, and visualizes it using Python libraries.
+This project is an ETL (Extract, Transform, Load) pipeline that collects weather data from an external API, stores it in a SQLite database, and visualises it using Python libraries.
 
-The pipeline collects weather parameters like temperature, pressure, humidity, and wind data from multiple cities, and stores them for historical analysis and visualization.
+The pipeline collects weather parameters like temperature, pressure, humidity, and wind data from multiple cities, and stores them for historical analysis and visualisation.
 
 ---
 
@@ -28,10 +28,10 @@ The pipeline collects weather parameters like temperature, pressure, humidity, a
 
 ## Technologies Used
 
-- **Python**: Main programming language for ETL and visualization.
+- **Python**: Main programming language for ETL and visualisation.
 - **SQLite**: Lightweight database for storing weather data.
 - **Pandas**: Data manipulation and analysis.
-- **Matplotlib, Seaborn, Plotly**: Libraries for data visualization.
+- **Matplotlib, Seaborn, Plotly**: Libraries for data visualisation.
 - **Requests**: For making HTTP requests to the weather API.
 
 ---

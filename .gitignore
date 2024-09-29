@@ -2,3 +2,4 @@ venv
 weather_data.db
 .env
 etl_process.log
+data/cities.csv

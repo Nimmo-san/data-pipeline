@@ -1,5 +1,6 @@
 import schedule
 import time
+import csv
 import requests
 import sqlite3
 import logging
@@ -21,9 +22,28 @@ logging.basicConfig(
 # Example log message
 logging.info("Logger has been configured successfully.")
 
+def load_data_from_file(file_path):
+    """
+    Loads a list of cities from a text file.
+    
+    :param file_path: Path to the text file containing city names.
+    :return: A list of city names.
+    """
+    
+    cities = []
+    with open(file_path, mode='r') as file:
+        csv_reader = csv.DictReader(file)
+        for row in csv_reader:
+            cities.append(row['city'])  # Or store as tuple (city, country) if needed
+    return cities
+
 
 def extract_weather_data(city):
-    """"""
+    """
+    
+    ARGS - string city
+
+    """
     try:
         logging.info(f"Starting data extraction for city: {city}")
         api_key = os.getenv("WEATHER_API_KEY")
@@ -41,7 +61,12 @@ def extract_weather_data(city):
 
 
 def transform_weather_data(raw_data):
-    """"""
+    """
+    
+
+    ARGS - raw_data
+
+    """
     try:
         logging.info("Starting data transformation.")
         if raw_data:
@@ -63,7 +88,9 @@ def transform_weather_data(raw_data):
 
 
 def create_database():
-    """"""
+    """
+    
+    """
     conn = sqlite3.connect("weather_data.db")
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS weather (
@@ -77,7 +104,11 @@ def create_database():
 
 
 def load_weather_data(data):
-    """"""
+    """
+    
+    
+    ARGS - data json
+    """
     try:
         logging.info(f"Starting data load for city: {data['city']}")
         conn = sqlite3.connect("weather_data.db")
@@ -99,7 +130,11 @@ def load_weather_data(data):
 
 
 def run_etl(cities: list):
-        """"""
+        """
+        
+        ARGS - list of cities
+
+        """
         calls_made = 0
         max_calls_per_hours = 60
         delay = 3600 / max_calls_per_hours
@@ -123,16 +158,18 @@ def run_etl(cities: list):
                     calls_made = 0
         logging.info("ETL process complete.")
         
-    
-
 
 
 
 
 if __name__ == '__main__':
-	# Scheduling to run ETL every hour
-	schedule.every(1).hour.do(run_etl, cities=["London", "Manchester", "New York"])
+    # using a csv to load the cities, json can also be used
+    city_file = 'data/cities.csv'
 
-	while True:
-		schedule.run_pending()
-		time.sleep(1)
+    cities  = load_data_from_file(city_file)
+
+    # Scheduling to run ETL every hour
+    schedule.every(1).hour.do(run_etl, cities)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)

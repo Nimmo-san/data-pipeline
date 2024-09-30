@@ -15,7 +15,7 @@
 ---
 
 ## Overview
-This project is an ETL (Extract, Transform, Load) pipeline that collects weather data from an external API, stores it in a SQLite database, and visualises it using Python libraries.
+This project is a simple ETL (Extract, Transform, Load) pipeline that collects weather data from an external API, stores it in a SQLite database, and visualises it using Python libraries.
 
 The pipeline collects weather parameters like temperature, pressure, humidity, and wind data from multiple cities, and stores them for historical analysis and visualisation.
 
@@ -23,6 +23,14 @@ The pipeline collects weather parameters like temperature, pressure, humidity, a
 
 ## Project Structure
 
+- **Root Files**:
+  - `README.md`: A description of the project.
+  - `data_ingestion.py`: Main extraction of the data.
+  - `visualise_weather_data.py`: Visualising of the data.
+  - `weather_api.py`: Local api for my testing of index.html
+  - `index.html`: Simple web page to visualise the data from the api.
+  - `.gitignore`: Specifies files that should be ignored by Git.
+  - `requirements.txt` or `Pipfile`: Dependencies needed for the project.
 
 ---
 
@@ -33,6 +41,7 @@ The pipeline collects weather parameters like temperature, pressure, humidity, a
 - **Pandas**: Data manipulation and analysis.
 - **Matplotlib, Seaborn, Plotly**: Libraries for data visualisation.
 - **Requests**: For making HTTP requests to the weather API.
+- **FastAPI**: For making local calls to visualise data.
 
 ---
 
@@ -81,22 +90,85 @@ Or if you rather use json file
 Weather data is stored in SQLite database under the name of weather_data.db
 - Below is the schema of the weather table
 
+### ADD SCHEMA
+
 ### ETL Pipeline
 
-### ETL Code snippet
+1. **Extracting** weather data from a weather API (e.g. OpenWeatherMap).
+2. **Transforming** the raw JSON data into structured format suitable for storage.
+3. **Loading** the transformed data into the weather_data.db SQLite database.
 
+### ETL Code snippet
+```python
+    import requests
+    import sqlite3
+
+    def extract_weather_data(city):
+        # Code to extract data from API using requests
+        pass
+
+    def transform_weather_data(raw_data):
+        # Code to transform JSON data
+        pass
+
+    def create_database():
+        # Code to create DB using sqlite3
+        pass
+
+    def load_weather_data(data):
+        # Code to insert data into SQLite database
+        pass
+```
+    
 ### How to use 
+
+1. Ensuring the .env has the correct API key
+2. Run the script
+```bash
+    python data_ingestion.py
+```
+    
+Logs of the process are stored in etl_process.log
 
 ## Data Visualisation
+The script ```visualise_weather_data.py``` script is responsible for accessing and visualising the data stored in the SQLite DB.
+Using ```Pandas``` to manipulate the data and ```MatplotLib```, ```Seaborn```, and ```plotly``` to create simple visualisations.
+
+### Example
+1. **Temperature Over Time**: Line plots of temperature over time for different cities.
 
 ### Visualisation Code snippet
+```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
+
+    def get_weather_data():
+        # Load data from SQLite database
+        pass 
+
+    def visualize_data():
+        # Create simple plots for weather data
+        pass
+```
 
 ### How to use 
+
+After running ```data_ingestion.py``` script to gather the latest data, run the script
+```bash
+    python visualise_weather_data.py
+```
 
 ## Usage
 
+
 ## Future Improvements
+
+- **Add more data sources** Example weather forecasts, etc. 
+- **ETL Process is too slow?** Using parallelisation and batching to improve speed and efficiency.
+- **Better data quality?** Implementing data validation and alert system as to catch data issues early.
+- **Need analysis and reporting?** Implementing aggregation and reporting to create summarised views of the data.
+- **Improve data visualisations** Providing a more comprehensive data visualisations.
 
 ---
 
-### **Notes on the README Content**
+<!--### **Notes on the README Content**-->

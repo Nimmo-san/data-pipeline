@@ -159,8 +159,28 @@ def run_etl(cities: list):
         logging.info("ETL process complete.")
         
 
+def run_etl_max_calls(cities: list):
+    """
+    
+    """
+    calls_made = 0
+    max_calls_per_hours = 60
 
+    while calls_made < max_calls_per_hours:
+        logging.info("ETL process started.")
+        for city in cities:
+                raw_data = extract_weather_data(city)
+                if not raw_data:
+                        logging.error(f"Skipping transformation and loading for city: {city} due to extraction failure.")
+                
+                transformed_data = transform_weather_data(raw_data=raw_data)
+                if not transformed_data:
+                        logging.error(f"Skipping loading for city: {city} due to transformation failure.")
+                
+                load_weather_data(transformed_data)
 
+        calls_made += 1
+    logging.info("ETL process complete.")
 
 if __name__ == '__main__':
     # using a csv to load the cities, json can also be used
@@ -169,7 +189,7 @@ if __name__ == '__main__':
     cities  = load_data_from_file(city_file)
 
     # Scheduling to run ETL every hour
-    schedule.every(1).hour.do(run_etl, cities)
+    schedule.every(1).second.do(run_etl_max_calls, cities)
     while True:
         schedule.run_pending()
         time.sleep(1)
